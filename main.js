@@ -140,7 +140,7 @@ async function _checkStatus({
   }
 
   // check VC's SRL index for revocation status
-  const verified = !list.isRevoked({index});
+  const verified = !list.isRevoked(index);
 
   // TODO: return anything else? returning `srlCredential` may be too unwieldy
   // given its potentially large size
