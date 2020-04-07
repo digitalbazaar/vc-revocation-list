@@ -23,6 +23,9 @@ export default class Bitstring {
   }
 
   set(position, on) {
+    if(typeof on !== 'boolean') {
+      throw new TypeError('"on" must be a boolean.');
+    }
     const {index, bit} = parsePosition(position, this.length);
     if(on) {
       this.bits[index] |= bit;
@@ -41,10 +44,11 @@ function parsePosition(position, length) {
   if(!(Number.isInteger(position) && position >= 0)) {
     throw new Error(`Position "${position}" must be a non-negative integer.`);
   }
+  if(position >= length) {
+    throw new Error(
+      `Position "${position}" is out of range "0-${length - 1}".`);
+  }
   const index = Math.floor(position / 8);
   const bit = 1 << (position % 8);
-  if(index >= length) {
-    throw new Error(`Position "${position}" is out of range "0-${length}".`);
-  }
   return {index, bit};
 }

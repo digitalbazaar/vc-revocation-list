@@ -4,14 +4,14 @@
 import Bitstring from '../Bitstring.js';
 
 describe('Bitstring', () => {
-  it('should create a Bitstring', async () => {
+  it('should create an instance', async () => {
     const bitstring = new Bitstring({length: 8});
     bitstring.length.should.equal(8);
     bitstring.bits.should.be.a('Uint8Array');
     bitstring.bits.length.should.equal(1);
   });
 
-  it('should fail to create a Bitstring if no length', async () => {
+  it('should fail to create an instance if no length', async () => {
     let err;
     try {
       new Bitstring();
@@ -41,5 +41,29 @@ describe('Bitstring', () => {
     bitstring.get(5).should.equal(false);
     bitstring.get(6).should.equal(false);
     bitstring.get(7).should.equal(false);
+  });
+
+  it('should fail to set a bit', async () => {
+    const list = new Bitstring({length: 8});
+    let err;
+    try {
+      list.set(0);
+    } catch(e) {
+      err = e;
+    }
+    should.exist(err);
+    err.name.should.equal('TypeError');
+  });
+
+  it('should fail to get a bit out of range', async () => {
+    const list = new Bitstring({length: 8});
+    let err;
+    try {
+      list.get(8);
+    } catch(e) {
+      err = e;
+    }
+    should.exist(err);
+    err.name.should.equal('Error');
   });
 });
