@@ -96,7 +96,7 @@ describe('main', () => {
     list.length.should.equal(100000);
   });
 
-  it('should create a credential', async () => {
+  it('should create a RevocationList2020Credential credential', async () => {
     const id = 'https://example.com/status/1';
     const list = await createList({length: 100000});
     const credential = await createCredential({id, list});
