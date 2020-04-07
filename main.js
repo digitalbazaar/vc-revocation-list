@@ -21,9 +21,10 @@ export async function createCredential({id, list}) {
   const encodedList = await list.encode();
   return {
     '@context': [CONTEXTS.VC_V1, CONTEXTS.SRL_V1],
+    id,
     type: ['VerifiableCredential', 'RevocationList2020Credential'],
     credentialSubject: {
-      id,
+      id: `${id}#list`,
       type: 'RevocationList2020',
       encodedList
     }

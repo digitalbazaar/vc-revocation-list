@@ -3,6 +3,9 @@
  */
 import RevocationList from '../RevocationList.js';
 
+const encodedList100k =
+  'H4sIAAAAAAAAA-3BMQEAAADCoPVPbQsvoAAAAAAAAAAAAAAAAP4GcwM92tQwAAA';
+
 describe('RevocationList', () => {
   it('should create an instance', async () => {
     const list = new RevocationList({length: 8});
@@ -23,14 +26,11 @@ describe('RevocationList', () => {
   it('should encode', async () => {
     const list = new RevocationList({length: 100000});
     const encodedList = await list.encode();
-    encodedList.should.equal(
-      'H4sIAAAAAAAAA-3BMQEAAADCoPVPbQsvoAAAAAAAAAAAAAAAAP4GcwM92tQwAAA');
+    encodedList.should.equal(encodedList100k);
   });
 
   it('should decode', async () => {
-    const encodedList =
-      'H4sIAAAAAAAAA-3BMQEAAADCoPVPbQsvoAAAAAAAAAAAAAAAAP4GcwM92tQwAAA';
-    const list = await RevocationList.decode({encodedList});
+    const list = await RevocationList.decode({encodedList: encodedList100k});
     list.length.should.equal(100000);
   });
 
