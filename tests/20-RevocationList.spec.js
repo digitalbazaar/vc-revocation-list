@@ -33,4 +33,25 @@ describe('RevocationList', () => {
     const list = await RevocationList.decode({encodedList});
     list.length.should.equal(100000);
   });
+
+  it('should mark a credential revoked', async () => {
+    const list = new RevocationList({length: 8});
+    list.isRevoked(0).should.equal(false);
+    list.isRevoked(1).should.equal(false);
+    list.isRevoked(2).should.equal(false);
+    list.isRevoked(3).should.equal(false);
+    list.isRevoked(4).should.equal(false);
+    list.isRevoked(5).should.equal(false);
+    list.isRevoked(6).should.equal(false);
+    list.isRevoked(7).should.equal(false);
+    list.setRevoked(4, true);
+    list.isRevoked(0).should.equal(false);
+    list.isRevoked(1).should.equal(false);
+    list.isRevoked(2).should.equal(false);
+    list.isRevoked(3).should.equal(false);
+    list.isRevoked(4).should.equal(true);
+    list.isRevoked(5).should.equal(false);
+    list.isRevoked(6).should.equal(false);
+    list.isRevoked(7).should.equal(false);
+  });
 });
