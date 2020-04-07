@@ -6,7 +6,7 @@ import vc from 'vc-js';
 
 const CONTEXTS = {
   VC_V1: 'https://www.w3.org/2018/credentials/v1',
-  SRL_V1: 'https://w3id.org/vc-revocation-list/v1'
+  RL_V1: 'https://w3id.org/vc-revocation-list/v1'
 };
 
 export async function createList({length}) {
@@ -20,7 +20,7 @@ export async function decodeList({encodedList}) {
 export async function createCredential({id, list}) {
   const encodedList = await list.encode();
   return {
-    '@context': [CONTEXTS.VC_V1, CONTEXTS.SRL_V1],
+    '@context': [CONTEXTS.VC_V1, CONTEXTS.RL_V1],
     id,
     type: ['VerifiableCredential', 'RevocationList2020Credential'],
     credentialSubject: {
@@ -32,12 +32,12 @@ export async function createCredential({id, list}) {
 }
 
 export async function checkStatus({
-  credential, documentLoader, suite, verifySrlCredential = true
+  credential, documentLoader, suite, verifyRevocationListCredential = true
 }) {
   const result = {};
   try {
     return await _checkStatus({
-      credential, documentLoader, suite, verifySrlCredential
+      credential, documentLoader, suite, verifyRevocationListCredential
     });
   } catch(e) {
     result.verified = false;
@@ -47,15 +47,15 @@ export async function checkStatus({
 }
 
 async function _checkStatus({
-  credential, documentLoader, suite, verifySrlCredential
+  credential, documentLoader, suite, verifyRevocationListCredential
 }) {
   if(!(credential && typeof credential === 'object')) {
     throw new TypeError('"credential" must be an object.');
   }
-  if(typeof documentLoader === 'function') {
+  if(typeof documentLoader !== 'function') {
     throw new TypeError('"documentLoader" must be an function.');
   }
-  if(!(suite && (
+  if(verifyRevocationListCredential && !(suite && (
     isArrayOfObjects(suite) ||
     (!Array.isArray(suite) && typeof suite === 'object')))) {
     throw new TypeError('"suite" must be an object or an array of objects.');
@@ -69,13 +69,13 @@ async function _checkStatus({
   if(contexts[0] !== CONTEXTS.VC_V1) {
     throw new Error(`The first "@context" value must be "${CONTEXTS.VC_V1}".`);
   }
-  if(!contexts.includes(CONTEXTS.SRL_V1)) {
-    throw new TypeError(`"@context" must include "${CONTEXTS.SRL_V1}".`);
+  if(!contexts.includes(CONTEXTS.RL_V1)) {
+    throw new TypeError(`"@context" must include "${CONTEXTS.RL_V1}".`);
   }
 
   const credentialStatus = getCredentialStatus(credential);
 
-  // get SRL position
+  // get RL position
   // TODO: bikeshed name
   const {revocationListIndex} = credentialStatus;
   const index = parseInt(revocationListIndex, 10);
@@ -83,10 +83,11 @@ async function _checkStatus({
     throw new TypeError('"revocationListIndex" must be an integer.');
   }
 
-  // retrieve SRL VC
-  let srlCredential;
+  // retrieve RL VC
+  let rlCredential;
   try {
-    srlCredential = await documentLoader(credentialStatus.id);
+    ({document: rlCredential} = await documentLoader(
+      credentialStatus.revocationListCredential));
   } catch(e) {
     const err = new Error(
       'Could not load "RevocationList2020Credential"; ' +
@@ -95,10 +96,10 @@ async function _checkStatus({
     throw err;
   }
 
-  // verify SRL VC
-  if(verifySrlCredential) {
+  // verify RL VC
+  if(verifyRevocationListCredential) {
     const verifyResult = await vc.verifyCredential({
-      credential: srlCredential,
+      credential: rlCredential,
       suite,
       documentLoader
     });
@@ -118,18 +119,18 @@ async function _checkStatus({
     }
   }
 
-  if(!srlCredential.type.includes('RevocationList2020Credential')) {
+  if(!rlCredential.type.includes('RevocationList2020Credential')) {
     throw new Error('"RevocationList2020Credential" type is not valid.');
   }
 
   // get JSON RevocationList
-  const {credentialSubject: srl} = srlCredential;
-  if(srl.type !== 'RevocationList2020') {
+  const {credentialSubject: rl} = rlCredential;
+  if(rl.type !== 'RevocationList2020') {
     throw new Error('"RevocationList2020" type is not valid.');
   }
 
-  // decode list from SRL VC
-  const {encodedList} = srl;
+  // decode list from RL VC
+  const {encodedList} = rl;
   let list;
   try {
     list = await decodeList({encodedList});
@@ -140,10 +141,10 @@ async function _checkStatus({
     throw err;
   }
 
-  // check VC's SRL index for revocation status
+  // check VC's RL index for revocation status
   const verified = !list.isRevoked(index);
 
-  // TODO: return anything else? returning `srlCredential` may be too unwieldy
+  // TODO: return anything else? returning `rlCredential` may be too unwieldy
   // given its potentially large size
   return {verified};
 }
@@ -159,12 +160,13 @@ function getCredentialStatus(credential) {
     throw new Error('"credentialStatus" is missing or invalid.');
   }
   const {credentialStatus} = credential;
-  if(credentialStatus.type !== 'RevocationListStatus2020') {
+  if(credentialStatus.type !== 'RevocationList2020Status') {
     throw new Error(
-      '"credentialStatus" type is not "RevocationListStatus2020".');
+      '"credentialStatus" type is not "RevocationList2020Status".');
   }
-  if(typeof credentialStatus.id !== 'string') {
-    throw new TypeError('"credentialStatus" id must be a string.');
+  if(typeof credentialStatus.revocationListCredential !== 'string') {
+    throw new TypeError(
+      '"credentialStatus" revocationListCredential must be a string.');
   }
 
   return credentialStatus;
