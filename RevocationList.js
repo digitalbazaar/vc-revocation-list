@@ -14,6 +14,9 @@ export default class RevocationList {
   }
 
   setRevoked(index, revoked) {
+    if(typeof revoked !== 'boolean') {
+      throw new TypeError('"revoked" must be a boolean.');
+    }
     return this.bitstring.set(index, revoked);
   }
 
