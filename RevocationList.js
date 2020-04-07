@@ -13,11 +13,11 @@ export default class RevocationList {
     this.length = this.bitstring.length;
   }
 
-  setRevoked({index, revoked}) {
+  setRevoked(index, revoked) {
     return this.bitstring.set(index, revoked);
   }
 
-  isRevoked({index}) {
+  isRevoked(index) {
     return this.bitstring.get(index);
   }
 
