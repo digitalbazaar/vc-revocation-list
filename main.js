@@ -34,14 +34,16 @@ export async function createCredential({id, list}) {
 export async function checkStatus({
   credential, documentLoader, suite, verifyRevocationListCredential = true
 }) {
-  const result = {};
+  let result;
   try {
-    return await _checkStatus({
+    result = await _checkStatus({
       credential, documentLoader, suite, verifyRevocationListCredential
     });
-  } catch(e) {
-    result.verified = false;
-    result.error = e;
+  } catch(error) {
+    result = {
+      verified: false,
+      error,
+    };
   }
   return result;
 }
