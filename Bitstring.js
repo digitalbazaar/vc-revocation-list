@@ -26,7 +26,7 @@ export default class Bitstring {
     if(typeof on !== 'boolean') {
       throw new TypeError('"on" must be a boolean.');
     }
-    const {index, bit} = parsePosition(position, this.length);
+    const {index, bit} = _parsePosition(position, this.length);
     if(on) {
       this.bits[index] |= bit;
     } else {
@@ -35,12 +35,12 @@ export default class Bitstring {
   }
 
   get(position) {
-    const {index, bit} = parsePosition(position, this.length);
+    const {index, bit} = _parsePosition(position, this.length);
     return !!(this.bits[index] & bit);
   }
 }
 
-function parsePosition(position, length) {
+function _parsePosition(position, length) {
   if(!(Number.isInteger(position) && position >= 0)) {
     throw new Error(`Position "${position}" must be a non-negative integer.`);
   }
