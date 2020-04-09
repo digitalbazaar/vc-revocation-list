@@ -81,7 +81,7 @@ async function _checkStatus({
   // TODO: bikeshed name
   const {revocationListIndex} = credentialStatus;
   const index = parseInt(revocationListIndex, 10);
-  if(index === NaN) {
+  if(isNaN(index)) {
     throw new TypeError('"revocationListIndex" must be an integer.');
   }
 
