@@ -22,7 +22,7 @@ describe('Bitstring', () => {
     err.name.should.equal('TypeError');
   });
 
-  it('should set a bit', async () => {
+  it('should set a bit to true', async () => {
     const bitstring = new Bitstring({length: 8});
     bitstring.get(0).should.equal(false);
     bitstring.get(1).should.equal(false);
@@ -41,6 +41,31 @@ describe('Bitstring', () => {
     bitstring.get(5).should.equal(false);
     bitstring.get(6).should.equal(false);
     bitstring.get(7).should.equal(false);
+  });
+
+  it('should set a bit to false', async () => {
+    const buffer = Uint8Array.from([255]);
+    const bitstring = new Bitstring({buffer});
+    bitstring.get(0).should.equal(true);
+    bitstring.get(1).should.equal(true);
+    bitstring.get(2).should.equal(true);
+    bitstring.get(3).should.equal(true);
+    bitstring.get(4).should.equal(true);
+    bitstring.get(5).should.equal(true);
+    bitstring.get(6).should.equal(true);
+    bitstring.get(7).should.equal(true);
+    bitstring.set(4, false);
+    bitstring.get(0).should.equal(true);
+    bitstring.get(1).should.equal(true);
+    bitstring.get(2).should.equal(true);
+    bitstring.get(3).should.equal(true);
+    bitstring.get(4).should.equal(false);
+    bitstring.get(5).should.equal(true);
+    bitstring.get(6).should.equal(true);
+    bitstring.get(7).should.equal(true);
+    bitstring.bits.should.have.length(1);
+    bitstring.length.should.equal(8);
+    bitstring.bits[0].should.equal(239);
   });
 
   it('should fail to set a bit', async () => {
