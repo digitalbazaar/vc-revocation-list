@@ -55,7 +55,7 @@ async function _checkStatus({
     throw new TypeError('"credential" must be an object.');
   }
   if(typeof documentLoader !== 'function') {
-    throw new TypeError('"documentLoader" must be an function.');
+    throw new TypeError('"documentLoader" must be a function.');
   }
   if(verifyRevocationListCredential && !(suite && (
     isArrayOfObjects(suite) ||
