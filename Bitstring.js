@@ -1,6 +1,11 @@
 /*!
  * Copyright (c) 2020 Digital Bazaar, Inc. All rights reserved.
  */
+import base64url from 'base64url-universal';
+import pako from 'pako';
+
+const {gzip, ungzip} = pako;
+
 export default class Bitstring {
   constructor({length, buffer} = {}) {
     if(length && buffer) {
@@ -37,6 +42,14 @@ export default class Bitstring {
   get(position) {
     const {index, bit} = _parsePosition(position, this.length);
     return !!(this.bits[index] & bit);
+  }
+
+  async encodeBits() {
+    return base64url.encode(gzip(this.bits));
+  }
+
+  static async decodeBits({encoded}) {
+    return ungzip(base64url.decode(encoded));
   }
 }
 
