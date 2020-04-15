@@ -1,11 +1,7 @@
 /*!
  * Copyright (c) 2020 Digital Bazaar, Inc. All rights reserved.
  */
-import base64url from 'base64url-universal';
-import pako from 'pako';
 import Bitstring from './Bitstring.js';
-
-const {gzip, ungzip} = pako;
 
 export default class RevocationList {
   constructor({length, buffer} = {}) {
@@ -25,11 +21,11 @@ export default class RevocationList {
   }
 
   async encode() {
-    return base64url.encode(gzip(this.bitstring.bits));
+    return this.bitstring.encodeBits();
   }
 
   static async decode({encodedList}) {
-    const buffer = ungzip(base64url.decode(encodedList));
+    const buffer = await Bitstring.decodeBits({encoded: encodedList});
     return new RevocationList({buffer});
   }
 }
