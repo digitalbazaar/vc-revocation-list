@@ -36,7 +36,7 @@
     "chai": "^4.2.0",
     "chai-bytes": "^0.1.2",
     "cross-env": "^5.2.0",
-    "eslint": "^5.16.0",
+    "eslint": "^6.8.0",
     "eslint-config-digitalbazaar": "^2.0.0",
     "karma": "^4.0.1",
     "karma-babel-preprocessor": "^8.0.0",
