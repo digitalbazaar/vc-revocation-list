@@ -6,5 +6,6 @@ module.exports = {
   },
   globals: {
     Uint8Array: true
-  }
+  },
+  ignorePatterns: ['dist/']
 }
