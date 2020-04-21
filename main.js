@@ -49,10 +49,29 @@ export async function checkStatus({
   return result;
 }
 
+export function assertRevocationList2020Context({credential} = {}) {
+  if(!(credential && typeof credential === 'object')) {
+    throw new TypeError('"credential" must be an object.');
+  }
+  // check for expected contexts
+  const {'@context': contexts} = credential;
+  if(!Array.isArray(contexts)) {
+    throw new TypeError('"@context" must be an array.');
+  }
+  if(contexts[0] !== CONTEXTS.VC_V1) {
+    throw new Error(`The first "@context" value must be "${CONTEXTS.VC_V1}".`);
+  }
+  if(!contexts.includes(CONTEXTS.RL_V1)) {
+    throw new TypeError(`"@context" must include "${CONTEXTS.RL_V1}".`);
+  }
+}
+
 export function getCredentialStatus({credential} = {}) {
   if(!(credential && typeof credential === 'object')) {
     throw new TypeError('"credential" must be an object.');
   }
+  assertRevocationList2020Context({credential});
+  // get and validate status
   if(!(credential.credentialStatus &&
     typeof credential.credentialStatus === 'object')) {
     throw new Error('"credentialStatus" is missing or invalid.');
@@ -83,18 +102,6 @@ async function _checkStatus({
     isArrayOfObjects(suite) ||
     (!Array.isArray(suite) && typeof suite === 'object')))) {
     throw new TypeError('"suite" must be an object or an array of objects.');
-  }
-
-  // check for expected contexts
-  const {'@context': contexts} = credential;
-  if(!Array.isArray(contexts)) {
-    throw new TypeError('"@context" must be an array.');
-  }
-  if(contexts[0] !== CONTEXTS.VC_V1) {
-    throw new Error(`The first "@context" value must be "${CONTEXTS.VC_V1}".`);
-  }
-  if(!contexts.includes(CONTEXTS.RL_V1)) {
-    throw new TypeError(`"@context" must include "${CONTEXTS.RL_V1}".`);
   }
 
   const credentialStatus = getCredentialStatus({credential});
