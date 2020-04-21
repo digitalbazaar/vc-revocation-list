@@ -49,6 +49,27 @@ export async function checkStatus({
   return result;
 }
 
+export function getCredentialStatus({credential} = {}) {
+  if(!(credential && typeof credential === 'object')) {
+    throw new TypeError('"credential" must be an object.');
+  }
+  if(!(credential.credentialStatus &&
+    typeof credential.credentialStatus === 'object')) {
+    throw new Error('"credentialStatus" is missing or invalid.');
+  }
+  const {credentialStatus} = credential;
+  if(credentialStatus.type !== 'RevocationList2020Status') {
+    throw new Error(
+      '"credentialStatus" type is not "RevocationList2020Status".');
+  }
+  if(typeof credentialStatus.revocationListCredential !== 'string') {
+    throw new TypeError(
+      '"credentialStatus" revocationListCredential must be a string.');
+  }
+
+  return credentialStatus;
+}
+
 async function _checkStatus({
   credential, documentLoader, suite, verifyRevocationListCredential
 }) {
@@ -76,7 +97,7 @@ async function _checkStatus({
     throw new TypeError(`"@context" must include "${CONTEXTS.RL_V1}".`);
   }
 
-  const credentialStatus = getCredentialStatus(credential);
+  const credentialStatus = getCredentialStatus({credential});
 
   // get RL position
   // TODO: bikeshed name
@@ -155,22 +176,4 @@ async function _checkStatus({
 function isArrayOfObjects(x) {
   return Array.isArray(x) && x.length > 0 &&
     x.every(x => x && typeof x === 'object');
-}
-
-function getCredentialStatus(credential) {
-  if(!(credential.credentialStatus &&
-    typeof credential.credentialStatus === 'object')) {
-    throw new Error('"credentialStatus" is missing or invalid.');
-  }
-  const {credentialStatus} = credential;
-  if(credentialStatus.type !== 'RevocationList2020Status') {
-    throw new Error(
-      '"credentialStatus" type is not "RevocationList2020Status".');
-  }
-  if(typeof credentialStatus.revocationListCredential !== 'string') {
-    throw new TypeError(
-      '"credentialStatus" revocationListCredential must be a string.');
-  }
-
-  return credentialStatus;
 }
