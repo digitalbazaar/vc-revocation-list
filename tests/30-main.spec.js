@@ -7,6 +7,8 @@ import vc from 'vc-js';
 
 const {defaultDocumentLoader} = vc;
 
+const VC_RL_CONTEXT = 'https://w3id.org/vc-revocation-list-2020/v1';
+
 const encodedList100k =
   'H4sIAAAAAAAAA-3BMQEAAADCoPVPbQsvoAAAAAAAAAAAAAAAAP4GcwM92tQwAAA';
 const encodedList100KWith50KthRevoked =
@@ -14,34 +16,36 @@ const encodedList100KWith50KthRevoked =
   'UMAAA';
 
 const documents = new Map();
-documents.set('https://w3id.org/vc-revocation-list/v1', {
+documents.set(VC_RL_CONTEXT, {
   '@context': {
     '@protected': true,
     RevocationList2020: {
-      '@id': 'https://w3id.org/vc-revocation-list#RevocationList2020',
+      '@id': 'https://w3id.org/vc-revocation-list-2020#RevocationList2020',
       '@type': '@id',
       '@context': {
         '@protected': true,
-        encodedList: 'https://w3id.org/vc-revocation-list#encodedList'
+        encodedList: 'https://w3id.org/vc-revocation-list-2020#encodedList'
       }
     },
     RevocationList2020Status: {
-      '@id': 'https://w3id.org/vc-revocation-list#RevocationList2020Status',
+      '@id':
+      'https://w3id.org/vc-revocation-list-2020#RevocationList2020Status',
       '@type': '@id',
       '@context': {
         '@protected': true,
         revocationListIndex: {
-          '@id': 'https://w3id.org/vc-revocation-list#revocationListIndex',
+          '@id': 'https://w3id.org/vc-revocation-list-2020#revocationListIndex',
           '@type': 'http://www.w3.org/2001/XMLSchema#integer'
         },
         revocationListCredential: {
-          '@id': 'https://w3id.org/vc-revocation-list#revocationListIndex',
+          '@id': 'https://w3id.org/vc-revocation-list-2020#revocationListIndex',
           '@type': '@id'
         }
       }
     },
     RevocationList2020Credential: {
-      '@id': 'https://w3id.org/vc-revocation-list#RevocationList2020Credential',
+      '@id':
+      'https://w3id.org/vc-revocation-list-2020#RevocationList2020Credential',
       '@type': '@id'
     }
   }
@@ -50,7 +54,7 @@ documents.set('https://w3id.org/vc-revocation-list/v1', {
 const RLC = {
   '@context': [
     'https://www.w3.org/2018/credentials/v1',
-    'https://w3id.org/vc-revocation-list/v1'
+    VC_RL_CONTEXT
   ],
   id: 'https://example.com/status/1',
   type: ['VerifiableCredential', 'RevocationList2020Credential'],
@@ -104,7 +108,7 @@ describe('main', () => {
     credential.should.deep.equal({
       '@context': [
         'https://www.w3.org/2018/credentials/v1',
-        'https://w3id.org/vc-revocation-list/v1'
+        VC_RL_CONTEXT
       ],
       id,
       type: ['VerifiableCredential', 'RevocationList2020Credential'],
@@ -120,7 +124,7 @@ describe('main', () => {
     const credential = {
       '@context': [
         'https://www.w3.org/2018/credentials/v1',
-        'https://w3id.org/vc-revocation-list/v1'
+        VC_RL_CONTEXT
       ],
       id: 'urn:uuid:a0418a78-7924-11ea-8a23-10bf48838a41',
       type: ['VerifiableCredential', 'example:TestCredential'],
@@ -144,7 +148,7 @@ describe('main', () => {
     const credential = {
       '@context': [
         'https://www.w3.org/2018/credentials/v1',
-        'https://w3id.org/vc-revocation-list/v1'
+        VC_RL_CONTEXT
       ],
       id: 'urn:uuid:a0418a78-7924-11ea-8a23-10bf48838a41',
       type: ['VerifiableCredential', 'example:TestCredential'],
@@ -168,7 +172,7 @@ describe('main', () => {
     const credential = {
       '@context': [
         'https://www.w3.org/2018/credentials/v1',
-        'https://w3id.org/vc-revocation-list/v1'
+        VC_RL_CONTEXT
       ],
       id: 'urn:uuid:a0418a78-7924-11ea-8a23-10bf48838a41',
       type: ['VerifiableCredential', 'example:TestCredential'],
@@ -191,7 +195,7 @@ describe('main', () => {
     const credential = {
       '@context': [
         'https://www.w3.org/2018/credentials/v1',
-        'https://w3id.org/vc-revocation-list/v1'
+        VC_RL_CONTEXT
       ],
       id: 'urn:uuid:a0418a78-7924-11ea-8a23-10bf48838a41',
       type: ['VerifiableCredential', 'example:TestCredential'],
@@ -214,7 +218,7 @@ describe('main', () => {
     const credential = {
       '@context': [
         'https://www.w3.org/2018/credentials/v1',
-        'https://w3id.org/vc-revocation-list/v1'
+        VC_RL_CONTEXT
       ],
       id: 'urn:uuid:e74fb1d6-7926-11ea-8e11-10bf48838a41',
       type: ['VerifiableCredential', 'example:TestCredential'],
