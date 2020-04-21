@@ -7,7 +7,7 @@ export {default as Bitstring} from './Bitstring.js';
 
 const CONTEXTS = {
   VC_V1: 'https://www.w3.org/2018/credentials/v1',
-  RL_V1: 'https://w3id.org/vc-revocation-list/v1'
+  RL_V1: 'https://w3id.org/vc-revocation-list-2020/v1'
 };
 
 export async function createList({length}) {
