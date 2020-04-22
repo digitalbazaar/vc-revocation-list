@@ -4,8 +4,5 @@ module.exports = {
   env: {
     node: true
   },
-  globals: {
-    Uint8Array: true
-  },
   ignorePatterns: ['dist/']
 }
