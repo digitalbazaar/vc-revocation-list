@@ -35,7 +35,7 @@ export default class Bitstring {
     if(on) {
       this.bits[index] |= bit;
     } else {
-      this.bits[index] &= 0xFFFFFFFF ^ bit;
+      this.bits[index] &= 0xFF ^ bit;
     }
   }
 
