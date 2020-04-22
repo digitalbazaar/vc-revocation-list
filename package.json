@@ -52,7 +52,7 @@
     "path-to-regexp": "^3.0.0",
     "route-params": "^0.2.0",
     "sinon": "^7.3.1",
-    "vc-revocation-list-2020-context": "github:digitalbazaar/vc-revocation-list-2020-context#master",
+    "vc-revocation-list-context": "github:digitalbazaar/vc-revocation-list-context#master",
     "webpack": "^4.29.6"
   },
   "repository": {
