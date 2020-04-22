@@ -3,7 +3,7 @@
  */
 import {createList, decodeList, createCredential, checkStatus} from '..';
 import {extendContextLoader} from 'jsonld-signatures';
-import {constants, contexts} from 'vc-revocation-list-2020-context';
+import {constants, contexts} from 'vc-revocation-list-context';
 import vc from 'vc-js';
 
 const {defaultDocumentLoader} = vc;
