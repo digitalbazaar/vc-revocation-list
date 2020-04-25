@@ -110,7 +110,7 @@ describe('main', () => {
         revocationListCredential: RLC.id
       }
     };
-    const result = await statusTypeMatches({credential});
+    const result = statusTypeMatches({credential});
     result.should.equal(true);
   });
 
@@ -133,7 +133,7 @@ describe('main', () => {
         revocationListCredential: RLC.id
       }
     };
-    const result = await statusTypeMatches({credential});
+    const result = statusTypeMatches({credential});
     result.should.equal(false);
   });
 
