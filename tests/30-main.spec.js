@@ -1,7 +1,9 @@
 /*!
  * Copyright (c) 2020 Digital Bazaar, Inc. All rights reserved.
  */
-import {createList, decodeList, createCredential, checkStatus} from '..';
+import {
+  createList, decodeList, createCredential, checkStatus, statusTypeMatches
+} from '..';
 import {extendContextLoader} from 'jsonld-signatures';
 import {constants, contexts} from 'vc-revocation-list-context';
 import vc from 'vc-js';
@@ -87,6 +89,52 @@ describe('main', () => {
         encodedList: encodedList100k
       }
     });
+  });
+
+  it('should indicate that the status type matches', async () => {
+    const credential = {
+      '@context': [
+        'https://www.w3.org/2018/credentials/v1',
+        VC_RL_CONTEXT_URL
+      ],
+      id: 'urn:uuid:a0418a78-7924-11ea-8a23-10bf48838a41',
+      type: ['VerifiableCredential', 'example:TestCredential'],
+      credentialSubject: {
+        id: 'urn:uuid:4886029a-7925-11ea-9274-10bf48838a41',
+        'example:test': 'foo'
+      },
+      credentialStatus: {
+        id: 'https://example.com/status/1#67342',
+        type: 'RevocationList2020Status',
+        revocationListIndex: '67342',
+        revocationListCredential: RLC.id
+      }
+    };
+    const result = await statusTypeMatches({credential});
+    result.should.equal(true);
+  });
+
+  it('should indicate that the status type does not match', async () => {
+    const credential = {
+      '@context': [
+        'https://www.w3.org/2018/credentials/v1',
+        VC_RL_CONTEXT_URL
+      ],
+      id: 'urn:uuid:a0418a78-7924-11ea-8a23-10bf48838a41',
+      type: ['VerifiableCredential', 'example:TestCredential'],
+      credentialSubject: {
+        id: 'urn:uuid:4886029a-7925-11ea-9274-10bf48838a41',
+        'example:test': 'foo'
+      },
+      credentialStatus: {
+        id: 'https://example.com/status/1#67342',
+        type: 'NotMatch',
+        revocationListIndex: '67342',
+        revocationListCredential: RLC.id
+      }
+    };
+    const result = await statusTypeMatches({credential});
+    result.should.equal(false);
   });
 
   it('should verify the status of a credential', async () => {
