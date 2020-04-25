@@ -49,7 +49,7 @@ export async function checkStatus({
   return result;
 }
 
-export async function statusTypeMatches({credential} = {}) {
+export function statusTypeMatches({credential} = {}) {
   if(!(credential && typeof credential === 'object')) {
     throw new TypeError('"credential" must be an object.');
   }
