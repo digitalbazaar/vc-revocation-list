@@ -1,6 +1,6 @@
 # vc-revocation-list-2020 ChangeLog
 
-## 1.0.0 - 2020-xx-xx
+## 1.0.0 - 2020-04-29
 
 ### Added
 - Add core files.
