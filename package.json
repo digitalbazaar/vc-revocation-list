@@ -83,11 +83,6 @@
   "nyc": {
     "exclude": [
       "tests"
-    ],
-    "reporter": [
-      "html",
-      "text-summary",
-      "text-lcov"
     ]
   }
 }
