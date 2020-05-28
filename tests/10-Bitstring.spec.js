@@ -22,6 +22,30 @@ describe('Bitstring', () => {
     err.name.should.equal('TypeError');
   });
 
+  it('should fail to create an instance if buffer and length', async () => {
+    let err;
+    try {
+      new Bitstring({length: 'foo', buffer: 'bar'});
+    } catch(e) {
+      err = e;
+    }
+    should.exist(err);
+    err.should.be.instanceof(Error);
+    err.message.should.contain('one of "length" or "buffer"');
+  });
+
+  it('fails to create instance if length is not positive integer', async () => {
+    let err;
+    try {
+      new Bitstring({length: -2.2});
+    } catch(e) {
+      err = e;
+    }
+    should.exist(err);
+    err.should.be.instanceof(TypeError);
+    err.message.should.contain('positive integer');
+  });
+  
   it('should set a bit to true', async () => {
     const bitstring = new Bitstring({length: 8});
     bitstring.get(0).should.equal(false);
