@@ -254,4 +254,25 @@ describe('main', () => {
       credential, documentLoader, verifyRevocationListCredential: false});
     result.verified.should.equal(false);
   });
+  
+  it('should fail to verify status on missing credential param', async () => {
+    let err;
+    let result;
+    try {
+      result = await checkStatus({
+        documentLoader, verifyRevocationListCredential: false});
+      result.verified.should.equal(false);
+    } catch(e) {
+      err = e;
+    }
+    should.not.exist(err);
+    should.exist(result);
+    result.should.be.an('object');
+    result.should.have.property('verified');
+    result.verified.should.be.a('boolean');
+    result.verified.should.be.false;
+    result.should.have.property('error');
+    result.error.should.be.instanceof(TypeError);
+    result.error.message.should.contain('"credential" must be an object');
+  });
 });
