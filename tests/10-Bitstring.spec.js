@@ -14,7 +14,7 @@ describe('Bitstring', () => {
   it('should fail to create an instance if no length', async () => {
     let err;
     try {
-      new Bitstring();
+      new Bitstring({length: undefined});
     } catch(e) {
       err = e;
     }
@@ -44,6 +44,22 @@ describe('Bitstring', () => {
     should.exist(err);
     err.should.be.instanceof(TypeError);
     err.message.should.contain('positive integer');
+  });
+  
+  it('fails to create instance if position is not positive integer', async () => {
+    let bitstring;    
+    let err;
+    let position;
+    try {
+      position = -0.1;
+      bitstring = new Bitstring({buffer: new Uint8Array(5)}).get(position);
+    } catch(e) {
+      err = e;
+    }
+    should.not.exist(bitstring);
+    should.exist(err);
+    err.should.be.instanceof(Error);
+    err.message.should.contain('non-negative integer');
   });
   
   it('should set a bit to true', async () => {
