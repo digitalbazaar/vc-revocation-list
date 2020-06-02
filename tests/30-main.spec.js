@@ -254,7 +254,7 @@ describe('main', () => {
       credential, documentLoader, verifyRevocationListCredential: false});
     result.verified.should.equal(false);
   });
-  
+
   it('should fail to verify status on missing credential param', async () => {
     let err;
     let result;
@@ -275,4 +275,25 @@ describe('main', () => {
     result.error.should.be.instanceof(TypeError);
     result.error.message.should.contain('"credential" must be an object');
   });
+  
+  // FIXME: objects are still unable to fail the test
+  const credentials = ['a', true, 1, [], {}];
+  for (const credential of credentials) {
+    it.skip('should fail to verify if credential is not an object', async () => {
+      let err;
+      let result;      
+      try {
+          console.log(credential);
+          result = await statusTypeMatches(credential);
+      
+      } catch(e) {
+        err = e;
+      }
+      console.log(err);
+      should.exist(err);
+      should.not.exist(result);
+      err.should.be.instanceof(TypeError);
+      err.message.should.contain('"credential" must be an object');
+    });
+  }; 
 });
