@@ -7,6 +7,7 @@ import {
 import {extendContextLoader} from 'jsonld-signatures';
 import {constants, contexts} from 'vc-revocation-list-context';
 import vc from 'vc-js';
+import { assertRevocationList2020Context, getCredentialStatus } from '../main';
 
 const {defaultDocumentLoader} = vc;
 
@@ -276,24 +277,115 @@ describe('main', () => {
     result.error.message.should.contain('"credential" must be an object');
   });
   
-  // FIXME: objects are still unable to fail the test
-  const credentials = ['a', true, 1, [], {}];
-  for (const credential of credentials) {
-    it.skip('should fail to verify if credential is not an object', async () => {
-      let err;
-      let result;      
-      try {
-          console.log(credential);
-          result = await statusTypeMatches(credential);
-      
-      } catch(e) {
-        err = e;
-      }
-      console.log(err);
-      should.exist(err);
-      should.not.exist(result);
-      err.should.be.instanceof(TypeError);
-      err.message.should.contain('"credential" must be an object');
-    });
-  }; 
-});
+  const credential = {
+    '@context': [
+      'https://www.w3.org/2018/credentials/v1',
+      VC_RL_CONTEXT_URL
+    ],
+    id: 'urn:uuid:e74fb1d6-7926-11ea-8e11-10bf48838a41',
+    type: ['VerifiableCredential', 'example:TestCredential'],
+    credentialSubject: {
+      id: 'urn:uuid:011e064e-7927-11ea-8975-10bf48838a41',
+      'example:test': 'bar'
+    },
+    credentialStatus: {
+      id: 'https://example.com/status/1#50000',
+      type: 'RevocationList2020Status',
+      revocationListIndex: '50000',
+      revocationListCredential: RLC.id
+    }
+  };
+
+  it('should fail to verify if credential is not an object for "statusTypeMatches"', async () => {
+    let err;
+    let result;
+    try {
+        result = statusTypeMatches('{credential}');
+    } catch(e) {
+      err = e;
+    }
+    should.exist(err);
+    should.not.exist(result);
+    err.should.be.instanceof(TypeError);
+    err.message.should.contain('"credential" must be an object');
+  });
+
+  it('should fail to verify if credential is not an object for "assertRevocationList2020Context"', async () => {
+    let err;
+    let result;
+    try {
+        result = assertRevocationList2020Context('{credential}');
+    } catch(e) {
+      err = e;
+    }
+    should.exist(err);
+    should.not.exist(result);
+    err.should.be.instanceof(TypeError);
+    err.message.should.contain('"credential" must be an object');
+  });
+
+  it('should fail to verify if credential is not an object for "getCredentialStatus"', async () => {
+    let err;
+    let result;
+    try {
+        result = getCredentialStatus('{credential}');
+    } catch(e) {
+      err = e;
+    }
+    should.exist(err);
+    should.not.exist(result);
+    err.should.be.instanceof(TypeError);
+    err.message.should.contain('"credential" must be an object');
+  });
+
+  const contextTest = {
+    '@context': {
+      'https://www.w3.org/2018/credentials/v1':
+      VC_RL_CONTEXT_URL
+    },
+    id: 'urn:uuid:e74fb1d6-7926-11ea-8e11-10bf48838a41',
+    type: ['VerifiableCredential', 'example:TestCredential'],
+    credentialSubject: {
+      id: 'urn:uuid:011e064e-7927-11ea-8975-10bf48838a41',
+      'example:test': 'bar'
+    },
+    credentialStatus: {
+      id: 'https://example.com/status/1#50000',
+      type: 'RevocationList2020Status',
+      revocationListIndex: '50000',
+      revocationListCredential: RLC.id
+    }
+  };
+
+// FIXME: Need to work around object testing and test for array
+  
+  it.skip('should fail to verify if @context is not an array in "statusTypeMatches"', async () => {
+    let err;
+    let result;
+    try {
+      result = statusTypeMatches({contextTest});
+      // returning the error for the object, not the array
+    } catch(e) {
+      err = e;
+    }
+    console.log(result, '----------------------');
+    should.exist(err);
+    should.not.exist(result);
+    err.should.be.instanceof(TypeError);
+    err.message.should.contain('"credential" must be an object');
+  });
+
+// TODO: Complete test for first "@context" value
+  it.skip('should fail to test the first "@context" value correctly', async () => {
+    let context;
+    let err;
+    let result;
+    try {
+
+    } catch(e) {
+      err = e;
+    }
+    err.should.be.instanceof(Error);
+    err.message.should.contain('first "@context" value');
+  });
+}); 
