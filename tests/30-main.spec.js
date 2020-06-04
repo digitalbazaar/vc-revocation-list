@@ -57,7 +57,9 @@ describe('main', () => {
   });
 
   it('should fail to create a list if no length', async () => {
-    let err;
+    let err;const id = 'https://example.com/status/1';
+    const list = await createList({length: 100000});
+    const credential = await createCredential({id, list});
     try {
       await createList();
     } catch(e) {
@@ -338,54 +340,211 @@ describe('main', () => {
     err.message.should.contain('"credential" must be an object');
   });
 
-  const contextTest = {
-    '@context': {
-      'https://www.w3.org/2018/credentials/v1':
-      VC_RL_CONTEXT_URL
-    },
-    id: 'urn:uuid:e74fb1d6-7926-11ea-8e11-10bf48838a41',
-    type: ['VerifiableCredential', 'example:TestCredential'],
-    credentialSubject: {
-      id: 'urn:uuid:011e064e-7927-11ea-8975-10bf48838a41',
-      'example:test': 'bar'
-    },
-    credentialStatus: {
-      id: 'https://example.com/status/1#50000',
-      type: 'RevocationList2020Status',
-      revocationListIndex: '50000',
-      revocationListCredential: RLC.id
-    }
-  };
-
-// FIXME: Need to work around object testing and test for array
-  
-  it.skip('should fail to verify if @context is not an array in "statusTypeMatches"', async () => {
+  it('should fail to verify if @context is not an array in "statusTypeMatches"', async () => {
+    const id = 'https://example.com/status/1';
+    const list = await createList({length: 100000});
+    const credential = await createCredential({id, list});
     let err;
     let result;
     try {
-      result = statusTypeMatches({contextTest});
-      // returning the error for the object, not the array
+      // Changing the @context property to a string
+      credential['@context'] = 'https://example.com/status/1';
+      result = statusTypeMatches({credential});
     } catch(e) {
       err = e;
     }
-    console.log(result, '----------------------');
     should.exist(err);
     should.not.exist(result);
     err.should.be.instanceof(TypeError);
-    err.message.should.contain('"credential" must be an object');
+    err.message.should.contain('"@context" must be an array');
   });
 
-// TODO: Complete test for first "@context" value
-  it.skip('should fail to test the first "@context" value correctly', async () => {
-    let context;
+  it('should fail to test the first "@context" value correctly in "statusTypeMatches"', async () => {
+    const id = 'https://example.com/status/1';
+    const list = await createList({length: 100000});
+    const credential = await createCredential({id, list});
     let err;
     let result;
     try {
-
+      // Changing the @context property intentionally
+      credential['@context'][0] = 'https://example.com/test/1';
+      result = statusTypeMatches({credential})
     } catch(e) {
       err = e;
     }
+    should.exist(err);
+    should.not.exist(result);
     err.should.be.instanceof(Error);
     err.message.should.contain('first "@context" value');
   });
+
+  it('should fail to verify if @context is not an array in "assertRevocationList2020Context"', async () => {
+    const id = 'https://example.com/status/1';
+    const list = await createList({length: 100000});
+    const credential = await createCredential({id, list});
+    let err;
+    let result;
+    try {
+      // Changing the @context property to a string
+      credential['@context'] = 'https://example.com/status/1';
+      result = assertRevocationList2020Context({credential});
+    } catch(e) {
+      err = e;
+    }
+    should.exist(err);
+    should.not.exist(result);
+    err.should.be.instanceof(TypeError);
+    err.message.should.contain('"@context" must be an array');
+  });
+
+  it('should fail to test the first "@context" value correctly in "assertRevocationList2020Context"', async () => {
+    const id = 'https://example.com/status/1';
+    const list = await createList({length: 100000});
+    const credential = await createCredential({id, list});
+    let err;
+    let result;
+    try {
+      // Changing the @context property intentionally
+      credential['@context'][0] = 'https://example.com/test/1';
+      result = assertRevocationList2020Context({credential})
+    } catch(e) {
+      err = e;
+    }
+    should.exist(err);
+    should.not.exist(result);
+    err.should.be.instanceof(Error);
+    err.message.should.contain('first "@context" value');
+  });
+
+  it('should fail to validate if "credentialStatus" does not exist in "statusTypeMatches"', async () => {
+    const id = 'https://example.com/status/1';
+    const list = await createList({length: 100000});
+    const credential = await createCredential({id, list});
+    let err;
+    let result;
+    try {
+      // Changing the credentialStatus property
+      delete credential.credentialStatus;      
+      result = statusTypeMatches({credential});
+    } catch(e) {
+      err = e;
+    }
+    result.should.equal(false);
+  });
+
+  it('should fail to verify if "credentialStatus" is not an object in "statusTypeMatches"', async () => {
+    const id = 'https://example.com/status/1';
+    const list = await createList({length: 100000});
+    const credential = await createCredential({id, list});
+    let err;
+    let result;
+    try {
+      // Changing credentialStatus to a string type
+      credential.credentialStatus = 'https://example.com/status/1#50000';
+      result = statusTypeMatches({credential});
+    } catch(e) {
+      err = e;
+    }
+    should.exist(err);
+    should.not.exist(result);
+    err.should.be.instanceof(Error);
+    err.message.should.contain('"credentialStatus" is invalid');
+  });
+
+  it('should return false if "CONTEXTS.RL_V1" is not in "@contexts" in "statusTypeMatches"', async () => {
+    const id = 'https://example.com/status/1';
+    const list = await createList({length: 100000});
+    const credential = await createCredential({id, list});    
+    let err;
+    let result;
+    try {
+      delete credential['@context'][1];
+      credential.credentialStatus = {
+        id: 'https://example.com/status/1#50000',
+        type: 'RevocationList2020Status',
+        revocationListIndex: '50000',
+        revocationListCredential: RLC.id
+      };      
+      result = statusTypeMatches({credential});
+    } catch(e) {
+      err = e;
+    }
+    result.should.equal(false);
+  });
+
+  it('should fail to validate if "CONTEXTS.RL_V1" is not in "@contexts" in "assertRevocationList2020"', async () => {
+    const id = 'https://example.com/status/1';
+    const list = await createList({length: 100000});
+    const credential = await createCredential({id, list});
+    let err;
+    let result;
+    try {
+      delete credential['@context'][1];
+      result = assertRevocationList2020Context({credential});
+    } catch(e) {
+      err = e;
+    }
+    should.exist(err);
+    should.not.exist(result);
+    err.should.be.instanceof(TypeError);
+    err.message.should.contain('@context" must include');
+  });
+  
+  it('should fail to verify if credentialStatus is not an object for "getCredentialStatus"', async () => {
+    const id = 'https://example.com/status/1';
+    const list = await createList({length: 100000});
+    const credential = await createCredential({id, list});
+    let err;
+    let result;
+    try {
+        delete credential.credentialStatus;
+        result = getCredentialStatus({credential});
+    } catch(e) {
+      err = e;
+    }
+    should.exist(err);
+    should.not.exist(result);
+    err.should.be.instanceof(Error);
+    err.message.should.contain('"credentialStatus" is missing or invalid');
+  });
+
+  it('should fail to validate if documentLoader is not a function', async () => {
+    const credential = {
+      '@context': [
+        'https://www.w3.org/2018/credentials/v1',
+        VC_RL_CONTEXT_URL
+      ],
+      id: 'urn:uuid:a0418a78-7924-11ea-8a23-10bf48838a41',
+      type: ['VerifiableCredential', 'example:TestCredential'],
+      credentialSubject: {
+        id: 'urn:uuid:4886029a-7925-11ea-9274-10bf48838a41',
+        'example:test': 'foo'
+      },
+      credentialStatus: {
+        id: 'https://example.com/status/1#67342',
+        type: 'RevocationList2020Status',
+        revocationListCredential: RLC.id
+      }
+    };
+    const documentLoader = 'https://example.com/status/1';
+    let err;
+    let result;
+    try {
+      result = await checkStatus({
+        credential, documentLoader, verifyRevocationListCredential: false});
+    } catch(e) {
+      err = e;
+    }
+    should.not.exist(err);
+    should.exist(result);
+    result.should.be.an('object');
+    result.should.have.property('verified');
+    result.verified.should.be.a('boolean');
+    result.verified.should.be.false;
+    result.should.have.property('error');
+    result.error.should.be.instanceof(TypeError);
+    result.error.message.should.contain('"documentLoader" must be a function');
+  })
+
 }); 
+// 67/89
