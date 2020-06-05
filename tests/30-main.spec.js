@@ -544,7 +544,161 @@ describe('main', () => {
     result.should.have.property('error');
     result.error.should.be.instanceof(TypeError);
     result.error.message.should.contain('"documentLoader" must be a function');
-  })
+  });
 
+  it('should fail to verify if suite is not an object or array of objects in checkStatus', async () => {
+    const credential = {
+      '@context': [
+        'https://www.w3.org/2018/credentials/v1',
+        VC_RL_CONTEXT_URL
+      ],
+      id: 'urn:uuid:e74fb1d6-7926-11ea-8e11-10bf48838a41',
+      type: ['VerifiableCredential', 'example:TestCredential'],
+      credentialSubject: {
+        id: 'urn:uuid:011e064e-7927-11ea-8975-10bf48838a41',
+        'example:test': 'bar'
+      },
+      credentialStatus: {
+        id: 'https://example.com/status/1#50000',
+        type: 'RevocationList2020Status',
+        revocationListIndex: '50000',
+        revocationListCredential: RLC.id
+      }
+    };
+    const documentLoader = extendContextLoader(async url => {
+      const doc = documents.get(url);
+      if(doc) {
+        return {
+          contextUrl: null,
+          documentUrl: url,
+          document: doc
+        };
+      }
+      return defaultDocumentLoader(url);
+    });
+    const suite = '{}';
+    let err;
+    let result;
+    try {
+      result = await checkStatus({
+        credential, documentLoader, suite, verifyRevocationListCredential: true});
+    } catch(e) {
+      err = e;
+    }
+    should.not.exist(err);
+    should.exist(result);
+    result.should.be.an('object');
+    result.should.have.property('verified');
+    result.verified.should.be.a('boolean');
+    result.verified.should.be.false;
+    result.should.have.property('error');
+    result.error.should.be.instanceof(TypeError);
+    result.error.message.should.contain('"suite" must be an object or an array of objects');
+  });
+
+// FIXME: Need to invoke the error message alone with the verification
+  it.skip('should fail to verify if "RevocationList2020Credential" is not valid', async () => {
+    const credential = {
+      '@context': [
+        'https://www.w3.org/2018/credentials/v1',
+        VC_RL_CONTEXT_URL
+      ],
+      id: 'urn:uuid:e74fb1d6-7926-11ea-8e11-10bf48838a41',
+      type: ['VerifiableCredential', 'RevocationList2020Credential'],
+      credentialSubject: {
+        id: 'urn:uuid:011e064e-7927-11ea-8975-10bf48838a41',
+        'example:test': 'bar'
+      },
+      credentialStatus: {
+        id: 'https://example.com/status/1#50000',
+        type: 'RevocationList2020Status',
+        revocationListIndex: '50000',
+        revocationListCredential: RLC.id
+      }
+    };
+    const documentLoader = extendContextLoader(async url => {
+      const doc = documents.get(url);
+      if(doc) {
+        return {
+          contextUrl: null,
+          documentUrl: url,
+          document: doc
+        };
+      }
+      return defaultDocumentLoader(url);
+    });
+    let err;
+    let result;
+    try {
+      delete credential.type[1];
+      result = await checkStatus({
+        credential, documentLoader, verifyRevocationListCredential: false});
+    } catch(e) {
+      err = e;
+    }
+    console.log(result);
+    should.not.exist(err);
+    should.exist(result);
+    result.should.be.an('object');
+    result.should.have.property('verified');
+    result.verified.should.be.a('boolean');
+    result.verified.should.be.false;
+    result.should.have.property('error');
+    result.error.should.be.instanceof(Error);
+    result.error.message.should.contain('"RevocationList2020Credential" not verified');
+  });
+
+// FIXME: Need to invoke the error message alone with the verification
+  it.skip('should fail to verify if "RevocationList2020" is not valid in checkStatus', async () => {
+    const credential = {
+      '@context': [
+        'https://www.w3.org/2018/credentials/v1',
+        VC_RL_CONTEXT_URL
+      ],
+      id: 'urn:uuid:e74fb1d6-7926-11ea-8e11-10bf48838a41',
+      type: ['VerifiableCredential', 'example:TestCredential'],
+      credentialSubject: {
+        id: 'urn:uuid:011e064e-7927-11ea-8975-10bf48838a41',
+        'example:test': 'bar'
+      },
+      credentialStatus: {
+        id: 'https://example.com/status/1#50000',
+        type: 'RevocationList2020Status',
+        revocationListIndex: '50000',
+        revocationListCredential: RLC.id
+      }
+    };
+    const documentLoader = extendContextLoader(async url => {
+      const doc = documents.get(url);
+      if(doc) {
+        return {
+          contextUrl: null,
+          documentUrl: url,
+          document: doc
+        };
+      }
+      return defaultDocumentLoader(url);
+    });
+    let err;
+    let result;
+    try {
+      delete credential.credentialSubject[0];
+      result = await checkStatus({
+        credential, documentLoader, verifyRevocationListCredential: false});
+    } catch(e) {
+      err = e;
+    }
+    console.log(result);
+    should.not.exist(err);
+    should.exist(result);
+    result.should.be.an('object');
+    result.should.have.property('verified');
+    result.verified.should.be.a('boolean');
+    result.verified.should.be.false;
+    result.should.have.property('error');
+    result.error.should.be.instanceof(Error);
+    result.error.message.should.contain('"RevocationList2020" type is not valid');
+  });
 }); 
-// 67/89
+// 69/89 
+// -Loveish
