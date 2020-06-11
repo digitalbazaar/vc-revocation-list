@@ -702,5 +702,3 @@ describe('main', () => {
       '"RevocationList2020" type is not valid');
   });
 });
-// 69/89
-// -Loveish
