@@ -7,7 +7,7 @@ import {
 import {extendContextLoader} from 'jsonld-signatures';
 import {constants, contexts} from 'vc-revocation-list-context';
 import vc from 'vc-js';
-import { assertRevocationList2020Context, getCredentialStatus } from '../main';
+import {assertRevocationList2020Context, getCredentialStatus} from '../main';
 
 const {defaultDocumentLoader} = vc;
 
@@ -57,9 +57,7 @@ describe('main', () => {
   });
 
   it('should fail to create a list if no length', async () => {
-    let err;const id = 'https://example.com/status/1';
-    const list = await createList({length: 100000});
-    const credential = await createCredential({id, list});
+    let err;
     try {
       await createList();
     } catch(e) {
@@ -278,31 +276,13 @@ describe('main', () => {
     result.error.should.be.instanceof(TypeError);
     result.error.message.should.contain('"credential" must be an object');
   });
-  
-  const credential = {
-    '@context': [
-      'https://www.w3.org/2018/credentials/v1',
-      VC_RL_CONTEXT_URL
-    ],
-    id: 'urn:uuid:e74fb1d6-7926-11ea-8e11-10bf48838a41',
-    type: ['VerifiableCredential', 'example:TestCredential'],
-    credentialSubject: {
-      id: 'urn:uuid:011e064e-7927-11ea-8975-10bf48838a41',
-      'example:test': 'bar'
-    },
-    credentialStatus: {
-      id: 'https://example.com/status/1#50000',
-      type: 'RevocationList2020Status',
-      revocationListIndex: '50000',
-      revocationListCredential: RLC.id
-    }
-  };
 
-  it('should fail to verify if credential is not an object for "statusTypeMatches"', async () => {
+  it('should fail to verify if credential is not an object for ' +
+   'statusTypeMatches"', async () => {
     let err;
     let result;
     try {
-        result = statusTypeMatches('{credential}');
+      result = statusTypeMatches('{credential}');
     } catch(e) {
       err = e;
     }
@@ -312,11 +292,12 @@ describe('main', () => {
     err.message.should.contain('"credential" must be an object');
   });
 
-  it('should fail to verify if credential is not an object for "assertRevocationList2020Context"', async () => {
+  it('should fail to verify if credential is not an object for ' +
+    '"assertRevocationList2020Context"', async () => {
     let err;
     let result;
     try {
-        result = assertRevocationList2020Context('{credential}');
+      result = assertRevocationList2020Context('{credential}');
     } catch(e) {
       err = e;
     }
@@ -326,11 +307,12 @@ describe('main', () => {
     err.message.should.contain('"credential" must be an object');
   });
 
-  it('should fail to verify if credential is not an object for "getCredentialStatus"', async () => {
+  it('should fail to verify if credential is not an object for ' +
+    '"getCredentialStatus"', async () => {
     let err;
     let result;
     try {
-        result = getCredentialStatus('{credential}');
+      result = getCredentialStatus('{credential}');
     } catch(e) {
       err = e;
     }
@@ -340,7 +322,8 @@ describe('main', () => {
     err.message.should.contain('"credential" must be an object');
   });
 
-  it('should fail to verify if @context is not an array in "statusTypeMatches"', async () => {
+  it('should fail to verify if @context is not an array in ' +
+    '"statusTypeMatches"', async () => {
     const id = 'https://example.com/status/1';
     const list = await createList({length: 100000});
     const credential = await createCredential({id, list});
@@ -359,7 +342,8 @@ describe('main', () => {
     err.message.should.contain('"@context" must be an array');
   });
 
-  it('should fail to test the first "@context" value correctly in "statusTypeMatches"', async () => {
+  it('should fail to test the first "@context" value correctly in ' +
+    'statusTypeMatches"', async () => {
     const id = 'https://example.com/status/1';
     const list = await createList({length: 100000});
     const credential = await createCredential({id, list});
@@ -368,7 +352,7 @@ describe('main', () => {
     try {
       // Changing the @context property intentionally
       credential['@context'][0] = 'https://example.com/test/1';
-      result = statusTypeMatches({credential})
+      result = statusTypeMatches({credential});
     } catch(e) {
       err = e;
     }
@@ -378,7 +362,8 @@ describe('main', () => {
     err.message.should.contain('first "@context" value');
   });
 
-  it('should fail to verify if @context is not an array in "assertRevocationList2020Context"', async () => {
+  it('should fail to verify if @context is not an array in ' +
+    '"assertRevocationList2020Context"', async () => {
     const id = 'https://example.com/status/1';
     const list = await createList({length: 100000});
     const credential = await createCredential({id, list});
@@ -397,7 +382,8 @@ describe('main', () => {
     err.message.should.contain('"@context" must be an array');
   });
 
-  it('should fail to test the first "@context" value correctly in "assertRevocationList2020Context"', async () => {
+  it('should fail to test the first "@context" value correctly in' +
+    '"assertRevocationList2020Context"', async () => {
     const id = 'https://example.com/status/1';
     const list = await createList({length: 100000});
     const credential = await createCredential({id, list});
@@ -406,7 +392,7 @@ describe('main', () => {
     try {
       // Changing the @context property intentionally
       credential['@context'][0] = 'https://example.com/test/1';
-      result = assertRevocationList2020Context({credential})
+      result = assertRevocationList2020Context({credential});
     } catch(e) {
       err = e;
     }
@@ -416,7 +402,8 @@ describe('main', () => {
     err.message.should.contain('first "@context" value');
   });
 
-  it('should fail to validate if "credentialStatus" does not exist in "statusTypeMatches"', async () => {
+  it('should fail to validate if "credentialStatus" does not ' +
+    'exist in "statusTypeMatches"', async () => {
     const id = 'https://example.com/status/1';
     const list = await createList({length: 100000});
     const credential = await createCredential({id, list});
@@ -424,15 +411,17 @@ describe('main', () => {
     let result;
     try {
       // Changing the credentialStatus property
-      delete credential.credentialStatus;      
+      delete credential.credentialStatus;
       result = statusTypeMatches({credential});
     } catch(e) {
       err = e;
     }
+    should.not.exist(err);
     result.should.equal(false);
   });
 
-  it('should fail to verify if "credentialStatus" is not an object in "statusTypeMatches"', async () => {
+  it('should fail to verify if "credentialStatus" is not an object in ' +
+    '"statusTypeMatches"', async () => {
     const id = 'https://example.com/status/1';
     const list = await createList({length: 100000});
     const credential = await createCredential({id, list});
@@ -451,10 +440,11 @@ describe('main', () => {
     err.message.should.contain('"credentialStatus" is invalid');
   });
 
-  it('should return false if "CONTEXTS.RL_V1" is not in "@contexts" in "statusTypeMatches"', async () => {
+  it('should return false if "CONTEXTS.RL_V1" is not in ' +
+    '"@contexts" in "statusTypeMatches"', async () => {
     const id = 'https://example.com/status/1';
     const list = await createList({length: 100000});
-    const credential = await createCredential({id, list});    
+    const credential = await createCredential({id, list});
     let err;
     let result;
     try {
@@ -464,15 +454,17 @@ describe('main', () => {
         type: 'RevocationList2020Status',
         revocationListIndex: '50000',
         revocationListCredential: RLC.id
-      };      
+      };
       result = statusTypeMatches({credential});
     } catch(e) {
       err = e;
     }
+    should.not.exist(err);
     result.should.equal(false);
   });
 
-  it('should fail to validate if "CONTEXTS.RL_V1" is not in "@contexts" in "assertRevocationList2020"', async () => {
+  it('should fail to validate if "CONTEXTS.RL_V1" is not in "@contexts" ' +
+    'in "assertRevocationList2020"', async () => {
     const id = 'https://example.com/status/1';
     const list = await createList({length: 100000});
     const credential = await createCredential({id, list});
@@ -489,16 +481,17 @@ describe('main', () => {
     err.should.be.instanceof(TypeError);
     err.message.should.contain('@context" must include');
   });
-  
-  it('should fail to verify if credentialStatus is not an object for "getCredentialStatus"', async () => {
+
+  it('should fail to verify if credentialStatus is not an object for ' +
+    '"getCredentialStatus"', async () => {
     const id = 'https://example.com/status/1';
     const list = await createList({length: 100000});
     const credential = await createCredential({id, list});
     let err;
     let result;
     try {
-        delete credential.credentialStatus;
-        result = getCredentialStatus({credential});
+      delete credential.credentialStatus;
+      result = getCredentialStatus({credential});
     } catch(e) {
       err = e;
     }
@@ -508,45 +501,48 @@ describe('main', () => {
     err.message.should.contain('"credentialStatus" is missing or invalid');
   });
 
-  it('should fail to validate if documentLoader is not a function', async () => {
-    const credential = {
-      '@context': [
-        'https://www.w3.org/2018/credentials/v1',
-        VC_RL_CONTEXT_URL
-      ],
-      id: 'urn:uuid:a0418a78-7924-11ea-8a23-10bf48838a41',
-      type: ['VerifiableCredential', 'example:TestCredential'],
-      credentialSubject: {
-        id: 'urn:uuid:4886029a-7925-11ea-9274-10bf48838a41',
-        'example:test': 'foo'
-      },
-      credentialStatus: {
-        id: 'https://example.com/status/1#67342',
-        type: 'RevocationList2020Status',
-        revocationListCredential: RLC.id
+  it('should fail to validate if documentLoader is not a function',
+    async () => {
+      const credential = {
+        '@context': [
+          'https://www.w3.org/2018/credentials/v1',
+          VC_RL_CONTEXT_URL
+        ],
+        id: 'urn:uuid:a0418a78-7924-11ea-8a23-10bf48838a41',
+        type: ['VerifiableCredential', 'example:TestCredential'],
+        credentialSubject: {
+          id: 'urn:uuid:4886029a-7925-11ea-9274-10bf48838a41',
+          'example:test': 'foo'
+        },
+        credentialStatus: {
+          id: 'https://example.com/status/1#67342',
+          type: 'RevocationList2020Status',
+          revocationListCredential: RLC.id
+        }
+      };
+      const documentLoader = 'https://example.com/status/1';
+      let err;
+      let result;
+      try {
+        result = await checkStatus({
+          credential, documentLoader, verifyRevocationListCredential: false});
+      } catch(e) {
+        err = e;
       }
-    };
-    const documentLoader = 'https://example.com/status/1';
-    let err;
-    let result;
-    try {
-      result = await checkStatus({
-        credential, documentLoader, verifyRevocationListCredential: false});
-    } catch(e) {
-      err = e;
-    }
-    should.not.exist(err);
-    should.exist(result);
-    result.should.be.an('object');
-    result.should.have.property('verified');
-    result.verified.should.be.a('boolean');
-    result.verified.should.be.false;
-    result.should.have.property('error');
-    result.error.should.be.instanceof(TypeError);
-    result.error.message.should.contain('"documentLoader" must be a function');
-  });
+      should.not.exist(err);
+      should.exist(result);
+      result.should.be.an('object');
+      result.should.have.property('verified');
+      result.verified.should.be.a('boolean');
+      result.verified.should.be.false;
+      result.should.have.property('error');
+      result.error.should.be.instanceof(TypeError);
+      result.error.message.should.contain(
+        '"documentLoader" must be a function');
+    });
 
-  it('should fail to verify if suite is not an object or array of objects in checkStatus', async () => {
+  it('should fail to verify if suite is not an object or array of ' +
+    'objects in checkStatus', async () => {
     const credential = {
       '@context': [
         'https://www.w3.org/2018/credentials/v1',
@@ -581,7 +577,8 @@ describe('main', () => {
     let result;
     try {
       result = await checkStatus({
-        credential, documentLoader, suite, verifyRevocationListCredential: true});
+        credential, documentLoader, suite, verifyRevocationListCredential: true
+      });
     } catch(e) {
       err = e;
     }
@@ -593,11 +590,13 @@ describe('main', () => {
     result.verified.should.be.false;
     result.should.have.property('error');
     result.error.should.be.instanceof(TypeError);
-    result.error.message.should.contain('"suite" must be an object or an array of objects');
+    result.error.message.should.contain(
+      '"suite" must be an object or an array of objects');
   });
 
-// FIXME: Need to invoke the error message alone with the verification
-  it.skip('should fail to verify if "RevocationList2020Credential" is not valid', async () => {
+  // FIXME: Need to invoke the error message alone with the verification
+  it.skip('should fail to verify if "RevocationList2020Credential" ' +
+    'is not valid', async () => {
     const credential = {
       '@context': [
         'https://www.w3.org/2018/credentials/v1',
@@ -645,11 +644,13 @@ describe('main', () => {
     result.verified.should.be.false;
     result.should.have.property('error');
     result.error.should.be.instanceof(Error);
-    result.error.message.should.contain('"RevocationList2020Credential" not verified');
+    result.error.message.should.contain(
+      '"RevocationList2020Credential" not verified');
   });
 
-// FIXME: Need to invoke the error message alone with the verification
-  it.skip('should fail to verify if "RevocationList2020" is not valid in checkStatus', async () => {
+  // FIXME: Need to invoke the error message alone with the verification
+  it.skip('should fail to verify if "RevocationList2020" ' +
+    'is not valid in checkStatus', async () => {
     const credential = {
       '@context': [
         'https://www.w3.org/2018/credentials/v1',
@@ -697,8 +698,9 @@ describe('main', () => {
     result.verified.should.be.false;
     result.should.have.property('error');
     result.error.should.be.instanceof(Error);
-    result.error.message.should.contain('"RevocationList2020" type is not valid');
+    result.error.message.should.contain(
+      '"RevocationList2020" type is not valid');
   });
-}); 
-// 69/89 
+});
+// 69/89
 // -Loveish
