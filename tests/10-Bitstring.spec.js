@@ -24,7 +24,7 @@ describe('Bitstring', () => {
     err.name.should.equal('TypeError');
   });
 
-  it('should fail to create an instance if buffer and length', async () => {
+  it('should fail to create an instance if both buffer and length given', async () => {
     let bitstring;
     let err;
     try {
@@ -56,9 +56,8 @@ describe('Bitstring', () => {
     async () => {
       let bitstring;
       let err;
-      let position;
       try {
-        position = -0.1;
+        const position = -0.1;
         bitstring = new Bitstring({buffer: new Uint8Array(5)}).get(position);
       } catch(e) {
         err = e;
