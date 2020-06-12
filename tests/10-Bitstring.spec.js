@@ -12,15 +12,61 @@ describe('Bitstring', () => {
   });
 
   it('should fail to create an instance if no length', async () => {
+    let bitstring;
     let err;
     try {
-      new Bitstring();
+      bitstring = new Bitstring({length: undefined});
     } catch(e) {
       err = e;
     }
+    should.not.exist(bitstring);
     should.exist(err);
     err.name.should.equal('TypeError');
   });
+
+  it('should fail to create an instance if both buffer and length given', async () => {
+    let bitstring;
+    let err;
+    try {
+      bitstring = new Bitstring({length: 'foo', buffer: 'bar'});
+    } catch(e) {
+      err = e;
+    }
+    should.not.exist(bitstring);
+    should.exist(err);
+    err.should.be.instanceof(Error);
+    err.message.should.contain('one of "length" or "buffer"');
+  });
+
+  it('fails to create instance if length is not positive integer', async () => {
+    let bitstring;
+    let err;
+    try {
+      bitstring = new Bitstring({length: -2.2});
+    } catch(e) {
+      err = e;
+    }
+    should.not.exist(bitstring);
+    should.exist(err);
+    err.should.be.instanceof(TypeError);
+    err.message.should.contain('positive integer');
+  });
+
+  it('fails to create instance if position is not positive integer',
+    async () => {
+      let bitstring;
+      let err;
+      try {
+        const position = -0.1;
+        bitstring = new Bitstring({buffer: new Uint8Array(5)}).get(position);
+      } catch(e) {
+        err = e;
+      }
+      should.not.exist(bitstring);
+      should.exist(err);
+      err.should.be.instanceof(Error);
+      err.message.should.contain('non-negative integer');
+    });
 
   it('should set a bit to true', async () => {
     const bitstring = new Bitstring({length: 8});
@@ -70,24 +116,28 @@ describe('Bitstring', () => {
 
   it('should fail to set a bit', async () => {
     const list = new Bitstring({length: 8});
+    let bit;
     let err;
     try {
-      list.set(0);
+      bit = list.set(0);
     } catch(e) {
       err = e;
     }
+    should.not.exist(bit);
     should.exist(err);
     err.name.should.equal('TypeError');
   });
 
   it('should fail to get a bit out of range', async () => {
     const list = new Bitstring({length: 8});
+    let bit;
     let err;
     try {
-      list.get(8);
+      bit = list.get(8);
     } catch(e) {
       err = e;
     }
+    should.not.exist(bit);
     should.exist(err);
     err.name.should.equal('Error');
   });
