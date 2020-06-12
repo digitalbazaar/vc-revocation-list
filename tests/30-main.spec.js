@@ -256,7 +256,7 @@ describe('main', () => {
     result.verified.should.equal(false);
   });
 
-  it('should fail to verify status on missing credential param', async () => {
+  it('should fail to verify status on missing "credential" param', async () => {
     let err;
     let result;
     try {
@@ -282,7 +282,7 @@ describe('main', () => {
     let err;
     let result;
     try {
-      result = statusTypeMatches('{credential}');
+      result = statusTypeMatches({credential: ''});
     } catch(e) {
       err = e;
     }
@@ -330,8 +330,8 @@ describe('main', () => {
     let err;
     let result;
     try {
-      // Changing the @context property to a string
-      credential['@context'] = 'https://example.com/status/1';
+      // change the @context property to a string
+      credential['@context'] = id;
       result = statusTypeMatches({credential});
     } catch(e) {
       err = e;
@@ -350,7 +350,7 @@ describe('main', () => {
     let err;
     let result;
     try {
-      // Changing the @context property intentionally
+      // change the @context property intentionally to an unexpected value
       credential['@context'][0] = 'https://example.com/test/1';
       result = statusTypeMatches({credential});
     } catch(e) {
@@ -370,7 +370,7 @@ describe('main', () => {
     let err;
     let result;
     try {
-      // Changing the @context property to a string
+      // change the @context property to a string
       credential['@context'] = 'https://example.com/status/1';
       result = assertRevocationList2020Context({credential});
     } catch(e) {
@@ -390,7 +390,7 @@ describe('main', () => {
     let err;
     let result;
     try {
-      // Changing the @context property intentionally
+      // change the @context property intentionally to an unexpected value
       credential['@context'][0] = 'https://example.com/test/1';
       result = assertRevocationList2020Context({credential});
     } catch(e) {
@@ -410,7 +410,7 @@ describe('main', () => {
     let err;
     let result;
     try {
-      // Changing the credentialStatus property
+      // remove required credentialStatus property
       delete credential.credentialStatus;
       result = statusTypeMatches({credential});
     } catch(e) {
