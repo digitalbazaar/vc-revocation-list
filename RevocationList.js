@@ -1,7 +1,7 @@
 /*!
  * Copyright (c) 2020 Digital Bazaar, Inc. All rights reserved.
  */
-import Bitstring from './Bitstring.js';
+import Bitstring from '@digitalbazaar/bitstring';
 
 export default class RevocationList {
   constructor({length, buffer} = {}) {
