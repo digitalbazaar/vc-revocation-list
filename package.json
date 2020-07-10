@@ -14,12 +14,12 @@
     "lint": "eslint ."
   },
   "files": [
-    "Bitstring.js",
     "RevocationList.js",
     "index.js",
     "main.js"
   ],
   "dependencies": {
+    "@digitalbazaar/bitstring": "^1.1.0",
     "base64url-universal": "^1.1.0",
     "esm": "^3.2.25",
     "jsonld-signatures": "^5.0.1",

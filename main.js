@@ -3,7 +3,6 @@
  */
 import RevocationList from './RevocationList.js';
 import vc from 'vc-js';
-export {default as Bitstring} from './Bitstring.js';
 
 const CONTEXTS = {
   VC_V1: 'https://www.w3.org/2018/credentials/v1',
