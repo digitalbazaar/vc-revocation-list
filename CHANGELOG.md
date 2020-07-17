@@ -1,5 +1,10 @@
 # vc-revocation-list-2020 ChangeLog
 
+## 2.0.0 - TBD
+
+### Changed
+- **BREAKING** Remove `Bitstring` export.
+
 ## 1.1.1 - 2020-07-17
 
 ### Fixed
