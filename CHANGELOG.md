@@ -1,9 +1,10 @@
 # vc-revocation-list-2020 ChangeLog
 
-## 2.0.0 - TBD
+## 2.0.0 - 2020-07-17
 
 ### Changed
-- **BREAKING** Remove `Bitstring` export.
+- **BREAKING**: Remove `Bitstring` export. `Bitstring` is now available via
+  the npm package `@digitalbazaar/bitstring`.
 
 ## 1.1.1 - 2020-07-17
 
