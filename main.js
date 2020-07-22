@@ -32,12 +32,20 @@ export async function createCredential({id, list}) {
 }
 
 export async function checkStatus({
-  credential, documentLoader, suite, verifyRevocationListCredential = true
+  credential,
+  documentLoader,
+  suite,
+  verifyRevocationListCredential = true,
+  verifyMatchingIssuers = false
 } = {}) {
   let result;
   try {
     result = await _checkStatus({
-      credential, documentLoader, suite, verifyRevocationListCredential
+      credential,
+      documentLoader,
+      suite,
+      verifyRevocationListCredential,
+      verifyMatchingIssuers,
     });
   } catch(error) {
     result = {
@@ -121,7 +129,11 @@ export function getCredentialStatus({credential} = {}) {
 }
 
 async function _checkStatus({
-  credential, documentLoader, suite, verifyRevocationListCredential
+  credential,
+  documentLoader,
+  suite,
+  verifyRevocationListCredential,
+  verifyMatchingIssuers
 }) {
   if(!(credential && typeof credential === 'object')) {
     throw new TypeError('"credential" must be an object.');
@@ -178,6 +190,26 @@ async function _checkStatus({
         err.cause = verifyResult.error;
       }
       throw err;
+    }
+  }
+
+  /**
+   * This checks that the issuer of the verifiable credential matches
+   * the issuer of the revocationListCredential
+   */
+  if(verifyMatchingIssuers) {
+    // covers both the URI and object cases
+    const credentialIssuer =
+      typeof credential.issuer === 'object' ?
+        credential.issuer.id :
+        credential.issuer;
+    const revocationListCredentialIssuer =
+      typeof rlCredential.issuer === 'object' ?
+        rlCredential.issuer.id :
+        rlCredential.issuer;
+
+    if(credentialIssuer !== revocationListCredentialIssuer) {
+      throw new Error('Issuers of the credentials do not match.');
     }
   }
 
