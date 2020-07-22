@@ -33,7 +33,8 @@ const RLC = {
     id: `https://example.com/status/1#list`,
     type: 'RevocationList2020',
     encodedList: encodedList100KWith50KthRevoked
-  }
+  },
+  issuer: 'did:example:123',
 };
 documents.set(RLC.id, RLC);
 
@@ -252,6 +253,35 @@ describe('main', () => {
     };
     const result = await checkStatus({
       credential, documentLoader, verifyRevocationListCredential: false});
+    result.verified.should.equal(false);
+  });
+
+  it('should fail to verify for non-matching credential issuers', async () => {
+    const credential = {
+      '@context': [
+        'https://www.w3.org/2018/credentials/v1',
+        VC_RL_CONTEXT_URL,
+      ],
+      id: 'urn:uuid:a0418a78-7924-11ea-8a23-10bf48838a41',
+      type: ['VerifiableCredential', 'example:TestCredential'],
+      credentialSubject: {
+        id: 'urn:uuid:4886029a-7925-11ea-9274-10bf48838a41',
+        'example:test': 'foo',
+      },
+      credentialStatus: {
+        id: 'https://example.com/status/1#67342',
+        type: 'RevocationList2020Status',
+        revocationListIndex: '67342',
+        revocationListCredential: RLC.id,
+      },
+      issuer: 'did:example:123',
+    };
+    const result = await checkStatus({
+      credential,
+      documentLoader,
+      verifyRevocationListCredential: false,
+      verifyMatchingIssuers: true,
+    });
     result.verified.should.equal(false);
   });
 });
