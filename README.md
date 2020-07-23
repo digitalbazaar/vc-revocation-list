@@ -45,7 +45,7 @@ let verifiableCredential = await vc.issue({
 
 ### Created a Credential which uses a RevocationList2020
 
-```
+```js
 // see imports above
 const credential = {
   "@context": [
