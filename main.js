@@ -193,10 +193,8 @@ async function _checkStatus({
     }
   }
 
-  /**
-   * This checks that the issuer of the verifiable credential matches
-   * the issuer of the revocationListCredential
-   */
+   // This checks that the issuer of the verifiable credential matches
+   // the issuer of the revocationListCredential
   if(verifyMatchingIssuers) {
     // covers both the URI and object cases
     const credentialIssuer =
