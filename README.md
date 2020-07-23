@@ -78,3 +78,5 @@ let verifiableCredential = await vc.issue({
   documentLoader,
 });
 ```
+
+TEST
