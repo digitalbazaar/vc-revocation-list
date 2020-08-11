@@ -193,18 +193,16 @@ async function _checkStatus({
     }
   }
 
-   // This checks that the issuer of the verifiable credential matches
-   // the issuer of the revocationListCredential
+  // ensure that the issuer of the verifiable credential matches
+  // the issuer of the revocationListCredential
   if(verifyMatchingIssuers) {
     // covers both the URI and object cases
     const credentialIssuer =
       typeof credential.issuer === 'object' ?
-        credential.issuer.id :
-        credential.issuer;
+        credential.issuer.id : credential.issuer;
     const revocationListCredentialIssuer =
       typeof rlCredential.issuer === 'object' ?
-        rlCredential.issuer.id :
-        rlCredential.issuer;
+        rlCredential.issuer.id : rlCredential.issuer;
 
     if(credentialIssuer !== revocationListCredentialIssuer) {
       throw new Error('Issuers of the credentials do not match.');
