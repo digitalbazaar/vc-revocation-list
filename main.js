@@ -204,7 +204,8 @@ async function _checkStatus({
       typeof rlCredential.issuer === 'object' ?
         rlCredential.issuer.id : rlCredential.issuer;
 
-    if(credentialIssuer !== revocationListCredentialIssuer) {
+    if(!(credentialIssuer && revocationListCredentialIssuer) ||
+      (credentialIssuer !== revocationListCredentialIssuer)) {
       throw new Error('Issuers of the credentials do not match.');
     }
   }
