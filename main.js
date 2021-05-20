@@ -36,7 +36,7 @@ export async function checkStatus({
   documentLoader,
   suite,
   verifyRevocationListCredential = true,
-  verifyMatchingIssuers = false
+  verifyMatchingIssuers = true
 } = {}) {
   let result;
   try {

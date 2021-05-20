@@ -111,7 +111,8 @@ describe('main', () => {
         type: 'RevocationList2020Status',
         revocationListIndex: '67342',
         revocationListCredential: RLC.id
-      }
+      },
+      issuer: RLC.issuer,
     };
     const result = statusTypeMatches({credential});
     result.should.equal(true);
@@ -134,7 +135,8 @@ describe('main', () => {
         type: 'NotMatch',
         revocationListIndex: '67342',
         revocationListCredential: RLC.id
-      }
+      },
+      issuer: RLC.issuer,
     };
     const result = statusTypeMatches({credential});
     result.should.equal(false);
@@ -157,7 +159,8 @@ describe('main', () => {
         type: 'RevocationList2020Status',
         revocationListIndex: '67342',
         revocationListCredential: RLC.id
-      }
+      },
+      issuer: RLC.issuer,
     };
     const result = await checkStatus({
       credential, documentLoader, verifyRevocationListCredential: false});
@@ -181,7 +184,8 @@ describe('main', () => {
         type: 'ex:NonmatchingStatusType',
         revocationListIndex: '67342',
         revocationListCredential: RLC.id
-      }
+      },
+      issuer: RLC.issuer,
     };
     const result = await checkStatus({
       credential, documentLoader, verifyRevocationListCredential: false});
@@ -204,7 +208,8 @@ describe('main', () => {
         id: 'https://example.com/status/1#67342',
         type: 'RevocationList2020Status',
         revocationListCredential: RLC.id
-      }
+      },
+      issuer: RLC.issuer,
     };
     const result = await checkStatus({
       credential, documentLoader, verifyRevocationListCredential: false});
@@ -227,7 +232,8 @@ describe('main', () => {
         id: 'https://example.com/status/1#67342',
         type: 'RevocationList2020Status',
         revocationListIndex: '67342'
-      }
+      },
+      issuer: RLC.issuer,
     };
     const result = await checkStatus({
       credential, documentLoader, verifyRevocationListCredential: false});
@@ -251,7 +257,8 @@ describe('main', () => {
         type: 'RevocationList2020Status',
         revocationListIndex: '50000',
         revocationListCredential: RLC.id
-      }
+      },
+      issuer: RLC.issuer,
     };
     const result = await checkStatus({
       credential, documentLoader, verifyRevocationListCredential: false});
@@ -673,4 +680,38 @@ describe('main', () => {
     result.error.message.should.equal(
       'Issuers of the credentials do not match.');
   });
+
+  it('should allow different issuers if verifyMatchingIssuers is false',
+    async () => {
+      const credential = {
+        '@context': [
+          'https://www.w3.org/2018/credentials/v1',
+          VC_RL_CONTEXT_URL,
+        ],
+        id: 'urn:uuid:a0418a78-7924-11ea-8a23-10bf48838a41',
+        type: ['VerifiableCredential', 'example:TestCredential'],
+        credentialSubject: {
+          id: 'urn:uuid:4886029a-7925-11ea-9274-10bf48838a41',
+          'example:test': 'foo',
+        },
+        credentialStatus: {
+          id: 'https://example.com/status/1#67342',
+          type: 'RevocationList2020Status',
+          revocationListIndex: '67342',
+          revocationListCredential: RLC.id,
+        },
+        // this issuer does not match the issuer for the mock RLC specified
+        // by `RLC.id` above
+        issuer: 'did:example:1234',
+      };
+      const result = await checkStatus({
+        credential,
+        documentLoader,
+        verifyRevocationListCredential: false,
+        // this flag is set to allow different values for credential.issuer and
+        // RLC.issuer
+        verifyMatchingIssuers: false,
+      });
+      result.verified.should.equal(true);
+    });
 });
