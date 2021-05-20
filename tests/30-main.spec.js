@@ -659,6 +659,8 @@ describe('main', () => {
         revocationListIndex: '67342',
         revocationListCredential: RLC.id,
       },
+      // this issuer does not match the issuer for the mock RLC specified
+      // by `RLC.id` above
       issuer: 'did:example:1234',
     };
     const result = await checkStatus({
@@ -668,5 +670,7 @@ describe('main', () => {
       verifyMatchingIssuers: true,
     });
     result.verified.should.equal(false);
+    result.error.message.should.equal(
+      'Issuers of the credentials do not match.');
   });
 });
