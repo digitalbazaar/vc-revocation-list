@@ -36,8 +36,7 @@ const RLC = {
     id: `https://example.com/status/1#list`,
     type: 'RevocationList2020',
     encodedList: encodedList100KWith50KthRevoked
-  },
-  issuer: 'did:example:123',
+  }
 };
 documents.set(RLC.id, RLC);
 
