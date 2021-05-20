@@ -1,5 +1,13 @@
 # vc-revocation-list-2020 ChangeLog
 
+## 3.0.0 - TBD
+
+### Changed
+- **BREAKING**: Revocation list credentials must have the same `issuer` value
+  as the credential to be revoked.
+  - This requirement can be removed by setting the new `verifyMatchingIssuers`
+    parameter to the `checkStatus` API to `false`.
+
 ## 2.0.0 - 2020-07-17
 
 ### Changed
