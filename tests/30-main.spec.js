@@ -660,7 +660,7 @@ describe('main', () => {
         revocationListIndex: '67342',
         revocationListCredential: RLC.id,
       },
-      issuer: 'did:example:123',
+      issuer: 'did:example:1234',
     };
     const result = await checkStatus({
       credential,
