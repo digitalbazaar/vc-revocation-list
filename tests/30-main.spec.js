@@ -677,8 +677,8 @@ describe('main', () => {
       verifyMatchingIssuers: true,
     });
     result.verified.should.equal(false);
-    result.error.message.should.equal(
-      'Issuers of the revocation credential and verifiable credential do not match.');
+    result.error.message.should.equal('Issuers of the revocation credential ' +
+      'and verifiable credential do not match.');
   });
 
   it('should allow different issuers if verifyMatchingIssuers is false',

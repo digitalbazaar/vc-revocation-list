@@ -206,7 +206,8 @@ async function _checkStatus({
 
     if(!(credentialIssuer && revocationListCredentialIssuer) ||
       (credentialIssuer !== revocationListCredentialIssuer)) {
-      throw new Error('Issuers of the revocation credential and verifiable credential do not match.');
+      throw new Error('Issuers of the revocation credential and verifiable ' +
+        'credential do not match.');
     }
   }
 
