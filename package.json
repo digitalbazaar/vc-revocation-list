@@ -21,7 +21,6 @@
   "dependencies": {
     "@digitalbazaar/bitstring": "^1.1.0",
     "@digitalbazaar/vc": "^1.0.0",
-    "base64url-universal": "^1.1.0",
     "esm": "^3.2.25",
     "jsonld-signatures": "^5.0.1"
   },
