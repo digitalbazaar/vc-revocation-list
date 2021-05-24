@@ -6,7 +6,7 @@ import {
 } from '..';
 import {extendContextLoader} from 'jsonld-signatures';
 import {constants, contexts} from 'vc-revocation-list-context';
-import vc from 'vc-js';
+import vc from '@digitalbazaar/vc';
 import {assertRevocationList2020Context, getCredentialStatus} from '../main.js';
 
 const {defaultDocumentLoader} = vc;

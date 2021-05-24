@@ -2,7 +2,7 @@
  * Copyright (c) 2020 Digital Bazaar, Inc. All rights reserved.
  */
 import RevocationList from './RevocationList.js';
-import vc from 'vc-js';
+import vc from '@digitalbazaar/vc';
 
 const CONTEXTS = {
   VC_V1: 'https://www.w3.org/2018/credentials/v1',
