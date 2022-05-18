@@ -1,4 +1,4 @@
-# vc-revocation-list-2020
+# @digitalbazaar/vc-revocation-list
 [Verifiable Credential Revocation List 2020](https://github.com/digitalbazaar/vc-status-rl-2020)
 
 ### Creating a RevocationList2020Credential
