@@ -1,8 +1,9 @@
-# vc-revocation-list-2020 ChangeLog
+# @digitalbazaar/vc-revocation-list ChangeLog
 
 ## 4.0.0 - 2022-xx-xx
 
 ### Changed
+- **BREAKING**: Rename package to `@digitalbazaar/vc-revocation-list`.
 - **BREAKING**: Convert to module (ESM).
 - **BREAKING**: Require Node.js >=14.
 - Update dependencies.
