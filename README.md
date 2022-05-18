@@ -1,21 +1,22 @@
 # @digitalbazaar/vc-revocation-list
-[Verifiable Credential Revocation List 2020](https://github.com/digitalbazaar/vc-status-rl-2020)
+
+[Verifiable Credential Revocation List 2020](https://github.com/w3c-ccg/vc-status-rl-2020)
 
 ### Creating a RevocationList2020Credential
 
 ```js
 const rl = require("vc-revocation-list");
 const jsigs = require("jsonld-signatures");
-const { Ed25519KeyPair } = require("crypto-ld");
+const {Ed25519KeyPair} = require("crypto-ld");
 const vc = require("vc-js");
 const documentLoader = require("./path-to/document-loader.js");
 
 const key = new Ed25519KeyPair({
-"id": "did:key:z6MknUVLM84Eo5mQswCqP7f6oNER84rmVKkCvypob8UtBC8K#z6MknUVLM84Eo5mQswCqP7f6oNER84rmVKkCvypob8UtBC8K",
-"controller": "did:key:z6MknUVLM84Eo5mQswCqP7f6oNER84rmVKkCvypob8UtBC8K",
-"type": "Ed25519VerificationKey2018",
-"privateKeyBase58": "CoZphRAfAVPqx9f54MRUBtmjD4uY6KPxQQKsE3frUbZ269tBD4AdTQAVbXHHgpewh4BunoXK8dotcUJ6JXhZPsh",
-"publicKeyBase58": "92EHksooTYGwmSN8hYhFxGgRJVav5SVrExuskrWsFyLw"
+  "id": "did:key:z6MknUVLM84Eo5mQswCqP7f6oNER84rmVKkCvypob8UtBC8K#z6MknUVLM84Eo5mQswCqP7f6oNER84rmVKkCvypob8UtBC8K",
+  "controller": "did:key:z6MknUVLM84Eo5mQswCqP7f6oNER84rmVKkCvypob8UtBC8K",
+  "type": "Ed25519VerificationKey2018",
+  "privateKeyBase58": "CoZphRAfAVPqx9f54MRUBtmjD4uY6KPxQQKsE3frUbZ269tBD4AdTQAVbXHHgpewh4BunoXK8dotcUJ6JXhZPsh",
+  "publicKeyBase58": "92EHksooTYGwmSN8hYhFxGgRJVav5SVrExuskrWsFyLw"
 });
 const suite = new Ed25519Signature2018({
   key,
