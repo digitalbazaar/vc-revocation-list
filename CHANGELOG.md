@@ -1,6 +1,6 @@
 # @digitalbazaar/vc-revocation-list ChangeLog
 
-## 4.0.0 - 2022-xx-xx
+## 4.0.0 - 2022-06-16
 
 ### Changed
 - **BREAKING**: Rename package to `@digitalbazaar/vc-revocation-list`.
