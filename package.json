@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@digitalbazaar/bitstring": "^2.0.0",
-    "@digitalbazaar/vc": "^3.0.0"
+    "@digitalbazaar/vc": "^5.0.0"
   },
   "devDependencies": {
     "c8": "^7.11.3",

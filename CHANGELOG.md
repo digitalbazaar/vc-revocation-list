@@ -1,5 +1,11 @@
 # @digitalbazaar/vc-revocation-list ChangeLog
 
+## 5.0.0 - 2022-10-xx
+
+### Changed
+- **BREAKING**: Use `@digitalbazaar/vc@5` to get better safe mode
+  protections.
+
 ## 4.0.0 - 2022-06-16
 
 ### Changed
