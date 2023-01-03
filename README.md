@@ -5,7 +5,7 @@
 ### Creating a RevocationList2020Credential
 
 ```js
-import rl from 'vc-revocation-list';
+import rl from '@digitalbazaar/vc-revocation-list';
 import jsigs from 'jsonld-signatures';
 import {Ed25519KeyPair} from 'crypto-ld';
 import * as vc from '@digitalbazaar/vc';
