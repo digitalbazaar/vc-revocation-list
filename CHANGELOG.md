@@ -1,6 +1,6 @@
 # @digitalbazaar/vc-revocation-list ChangeLog
 
-## 5.0.1 - 2023-TBD
+## 5.0.1 - 2023-01-04
 
 ### Fixed
 - Fix import example in readme to be namespaced.
