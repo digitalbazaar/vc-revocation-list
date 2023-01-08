@@ -1,6 +1,6 @@
 # @digitalbazaar/vc-revocation-list ChangeLog
 
-## 6.0.0 - 2023-01-dd
+## 6.0.0 - 2023-01-08
 
 ### Changed
 - **BREAKING**: Use little-endian bit order in bitstrings. Previous versions
