@@ -64,7 +64,7 @@
   },
   "homepage": "https://github.com/digitalbazaar/vc-revocation-list",
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "c8": {
     "reporter": [

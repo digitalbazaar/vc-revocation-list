@@ -9,6 +9,9 @@
   consistently little endian. Any legacy status lists that depended on the old
   order will be incompatible with this version.
 
+### Removed
+- **BREAKING**: Remove support for node 14. Node 16+ required.
+
 ## 5.0.1 - 2023-01-04
 
 ### Fixed
