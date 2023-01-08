@@ -1,5 +1,14 @@
 # @digitalbazaar/vc-revocation-list ChangeLog
 
+## 6.0.0 - 2023-01-dd
+
+### Changed
+- **BREAKING**: Use little-endian bit order in bitstrings. Previous versions
+  used little-endian order internally for the bytes used to represent the
+  bitstring, but big-endian order for the bits. This makes the endianness
+  consistently little endian. Any legacy status lists that depended on the old
+  order will be incompatible with this version.
+
 ## 5.0.1 - 2023-01-04
 
 ### Fixed
