@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@digitalbazaar/bitstring": "^3.0.0",
-    "@digitalbazaar/vc": "github:digitalbazaar/vc#update-vc-2.0"
+    "@digitalbazaar/vc": "github:digitalbazaar/vc#vc-2.0-time-props"
   },
   "devDependencies": {
     "c8": "^7.11.3",
