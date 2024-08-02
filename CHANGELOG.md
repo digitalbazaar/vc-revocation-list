@@ -4,6 +4,10 @@
 
 ### Changed
 - **BREAKING**: Require Node.js 18+.
+- **BREAKING**: Update dependencies.
+  - Support added for VC 2.0.
+  - `@digitalbazaar/vc@7`.
+- Update test and dev dependencies.
 
 ## 6.0.0 - 2023-01-08
 
