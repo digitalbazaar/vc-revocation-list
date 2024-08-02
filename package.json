@@ -15,7 +15,7 @@
     "coverage": "cross-env NODE_ENV=test c8 npm run test-node",
     "coverage-ci": "cross-env NODE_ENV=test c8 --reporter=lcovonly --reporter=text-summary --reporter=text npm run test-node",
     "coverage-report": "c8 report",
-    "lint": "eslint ."
+    "lint": "eslint --ext .cjs,.js ."
   },
   "dependencies": {
     "@digitalbazaar/bitstring": "^3.0.0",
@@ -25,10 +25,10 @@
     "c8": "^7.11.3",
     "chai": "^4.3.6",
     "cross-env": "^7.0.3",
-    "eslint": "^8.17.0",
-    "eslint-config-digitalbazaar": "^3.0.0",
-    "eslint-plugin-jsdoc": "^39.3.2",
-    "eslint-plugin-unicorn": "^42.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-digitalbazaar": "^5.2.0",
+    "eslint-plugin-jsdoc": "^48.11.0",
+    "eslint-plugin-unicorn": "^55.0.0",
     "jsonld-signatures": "^10.0.0",
     "karma": "^6.4.0",
     "karma-chai": "^0.1.0",
