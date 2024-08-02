@@ -1,5 +1,10 @@
 # @digitalbazaar/vc-revocation-list ChangeLog
 
+## 7.0.0 - 2024-08-xx
+
+### Changed
+- **BREAKING**: Require Node.js 18+.
+
 ## 6.0.0 - 2023-01-08
 
 ### Changed
