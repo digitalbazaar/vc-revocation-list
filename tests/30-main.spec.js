@@ -2,14 +2,14 @@
  * Copyright (c) 2020-2022 Digital Bazaar, Inc. All rights reserved.
  */
 import {
-  createList, decodeList, createCredential, checkStatus, statusTypeMatches
-} from '../lib/index.js';
-import jsigs from 'jsonld-signatures';
-import {constants, contexts} from 'vc-revocation-list-context';
-import {defaultDocumentLoader} from '@digitalbazaar/vc';
-import {
   assertRevocationList2020Context, getCredentialStatus
 } from '../lib/index.js';
+import {
+  checkStatus, createCredential, createList, decodeList, statusTypeMatches
+} from '../lib/index.js';
+import {constants, contexts} from 'vc-revocation-list-context';
+import {defaultDocumentLoader} from '@digitalbazaar/vc';
+import jsigs from 'jsonld-signatures';
 
 const {extendContextLoader} = jsigs;
 
